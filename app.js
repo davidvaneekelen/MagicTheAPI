@@ -3,8 +3,11 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+// repos
+var mtgRepo = require('./repos/mtgRepo');
+
+// routes
+var mtg = require('./routes/mtg')(new mtgRepo());
 
 var app = express();
 
@@ -14,8 +17,7 @@ mongoose.connect('mongodb://localhost:27017/magictheapi');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use('/', mtg);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
